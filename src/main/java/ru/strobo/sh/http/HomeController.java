@@ -5,7 +5,6 @@
  */
 package ru.strobo.sh.http;
 
-import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -51,7 +50,7 @@ public class HomeController {
     public String login(Model model, HttpServletRequest  request, HttpServletResponse  response) {
         HttpSession sess =  request.getSession();
         Object Auth = sess.getAttribute("Auth");
-        String errorMess = "";
+        String errorMess = ""; String uName = "";
         
         Logger.info("Incomming http request in login.");
         
@@ -63,15 +62,18 @@ public class HomeController {
                 errorMess = "Пароль и Имя пользователя не могут быть пустыми.";
             } else {
                 
-                User user = null; // uDao.auth(userName, userPass);
-//
-//                if( user !=null ) {
+                User user = uDao.auth(userName, userPass);
+                String sessId = user.getSessionId();
+
+                if( sessId !=null && !sessId.isEmpty() ) {
                     Auth = "true";
                     sess.setAttribute("Auth", Auth);
                     sess.setAttribute("User", user);
-//                } else {
-//                    errorMess = "В доступе отказано.";
-//                }
+                    sess.setAttribute("SessID", sessId);
+                    uName = user.getLogin();
+                } else {
+                    errorMess = "В доступе отказано.";
+                }
             }
         }
         
@@ -82,6 +84,7 @@ public class HomeController {
             Logger.info("Redirect to home.");
             response.setHeader("Location", "/home");
             response.setStatus(302);
+            model.addAttribute("uName", uName);
             return "main";
         }
 
@@ -92,6 +95,7 @@ public class HomeController {
         HttpSession sess =  request.getSession();
         sess.removeAttribute("Auth");
         sess.removeAttribute("User");
+        sess.removeAttribute("SessID");
         response.setHeader("Location", "/home/login");
         response.setStatus(302);
         return "login";

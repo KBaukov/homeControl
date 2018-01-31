@@ -5,18 +5,18 @@ Ext.onReady(function(){
   var MainToolBar = {
       region: 'south', xtype: 'toolbar', height: 30, border: true,
       items: [
-          {xtype: 'tbtext', text: '&nbsp;Имя пользователя: <b>admin</b>'}, '->',
+          {xtype: 'tbtext', text: '&nbsp;Имя пользователя: <b>'+user+'</b>'}, '->',
           {text: 'Выход', handler: CloseWin, id: 'close-btn',icon: '/extjs/img/exit.png'}
       ]
   };
   
-  var MainTab  = Ext.create('MainTab');
+  var ControlTab  = Ext.create('ControlTab');
   var SettingsTab  = Ext.create('SettingsTab');
-  //var ReportTab  = Ext.create('ReportTab');
+  var MapPanel  = Ext.create('MapPanel');
   
   var MainPanel  = Ext.create('Ext.tab.Panel',{
     region: 'center',
-    items: [MainTab, SettingsTab ]
+    items: [ MapPanel, ControlTab, SettingsTab ]
   });
   
   var delimHr = { xtype: 'box', html:'', style: 'border-bottom: 1px solid #99BCE8;', height: 5};

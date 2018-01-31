@@ -17,14 +17,15 @@
         <script type="text/javascript" src="/extjs/locale/ext-lang-ru.js"></script>        
         <script type="text/javascript" src="/js/common.js"></script>
         <script type="text/javascript" src="/js/main/main.js"></script>
+        <script type="text/javascript" src="/js/main/MapPanel.js"></script>
         <script type="text/javascript" src="/js/main/KotelTabPanel.js"></script>
         <script type="text/javascript" src="/js/kotel/KotelViewPanel.js"></script>
         <script type="text/javascript" src="/js/kotel/KotelControlPanel.js"></script>
         <script type="text/javascript" src="/js/main/SettingsTab.js"></script>
         <script type="text/javascript" src="/js/main/Devices.js"></script>
         <script type="text/javascript" src="/js/main/Users.js"></script>
-        <script type="text/javascript" src="/js/main/MainTab.js"></script>
-        <script type="text/javascript" src="/examples/shared/examples.js"></script>
+        <script type="text/javascript" src="/js/main/ControlTab.js"></script>
+        <script type="text/javascript">var user = '${uName}';</script>
         <title>HOME Controll</title>
     </head>    
     <body id="boby"><div id="vp"></div></body>

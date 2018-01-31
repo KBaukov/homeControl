@@ -18,6 +18,7 @@ public class User {
     private String login;
     private String pass;
     private String activeFlag;
+    private String sessionId;
     private Date lastVisit;
 
     public User(Integer id, String userType, String login, String pass, String activeFlag, Date lastVisit) {
@@ -73,6 +74,14 @@ public class User {
 
     public void setActiveFlag(String activeFlag) {
         this.activeFlag = activeFlag;
+    }
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
     }
 
     public Date getLastVisit() {

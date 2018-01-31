@@ -7,7 +7,7 @@ Ext.define('SettingsTab', {
     initComponent: function() {
       this.initPanel(); 
       this.items =  [ this.users, this.devices ];
-      MainTab.superclass.initComponent.apply(this, arguments);
+      SettingsTab.superclass.initComponent.apply(this, arguments);
     }, 
     initPanel: function() {
       this.users   = Ext.create('Users',  {papa: this} );
