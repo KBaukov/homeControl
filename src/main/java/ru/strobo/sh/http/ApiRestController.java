@@ -62,7 +62,7 @@ public class ApiRestController {
             sess.setAttribute("User", user);
             sess.setAttribute("SessID", sessionId);
             
-            return "{success:true,sess:\"" + sessionId + "\"}";
+            return "{success:true,sess:\"JSESSIONID=" + sess.getId() + "\"}";
         } else {
             return "{success:false,msg:\"Вдоступе отказано\"}";
         }

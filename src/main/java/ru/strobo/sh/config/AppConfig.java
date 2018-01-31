@@ -23,6 +23,8 @@ public class AppConfig extends WebMvcConfigurerAdapter  {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-       registry.addInterceptor(csi).addPathPatterns("/api/*").excludePathPatterns("/api/login");
+       registry.addInterceptor(csi).addPathPatterns("/api/*").
+               excludePathPatterns("/api/login").
+               excludePathPatterns("/api/ctrlc");
     }
 } 

@@ -5,6 +5,7 @@
  */
 package ru.strobo.sh.http;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -50,9 +51,14 @@ public class CheckSessionInterseptor extends HandlerInterceptorAdapter {
         HttpSession sess =  request.getSession();
         String sessId = (String) sess.getAttribute("SessID");
         
-        Logger.info("Check session: sessionID="+sessId);
-
-        return uDao.checkSession(sessId);
+        Logger.debug("Check session: sessionID="+sessId);
+        
+        if(uDao.checkSession(sessId)) {
+            return true;
+        } else {
+            response.setStatus(403);
+            return false;
+        }
     }
 
 
