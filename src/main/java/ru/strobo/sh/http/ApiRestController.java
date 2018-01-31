@@ -75,11 +75,11 @@ public class ApiRestController {
             HttpServletRequest   request
     ) {
         String data = "";
-        HttpSession sess =  request.getSession();        
-        String sessId = (String) sess.getAttribute("SessID");
-        if(!uDao.checkSession(sessId) ) {
-            return "{ success: false, error:{ errorCode:403, errorMessage:\"Session Die\"} }";
-        }
+//        HttpSession sess =  request.getSession();        
+//        String sessId = (String) sess.getAttribute("SessID");
+//        if(!uDao.checkSession(sessId) ) {
+//            return "{ success: false, error:{ errorCode:403, errorMessage:\"Session Die\"} }";
+//        }
         
         List<User> users = uDao.getUsers();
         
