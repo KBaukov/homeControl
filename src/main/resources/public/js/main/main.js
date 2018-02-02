@@ -5,7 +5,7 @@ Ext.onReady(function(){
   var MainToolBar = {
       region: 'south', xtype: 'toolbar', height: 30, border: true,
       items: [
-          {xtype: 'tbtext', text: '&nbsp;Имя пользователя: <b>'+user+'</b>'}, '->',
+          {xtype: 'tbtext', text: '&nbsp;Имя пользователя: <b>'+user.login+'</b>'}, '->',
           {text: 'Выход', handler: CloseWin, id: 'close-btn',icon: '/extjs/img/exit.png'}
       ]
   };

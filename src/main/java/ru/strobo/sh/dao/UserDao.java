@@ -38,6 +38,7 @@ public class UserDao {
     public static final String DEL_SESS_BY_ID = "DELETE FROM \"PUBLIC\".SESSIONS WHERE session_id=?;";
     public static final String CREATE_SESS = "INSERT INTO \"PUBLIC\".SESSIONS (session_id, user_id, exp_date) VALUES (?,?,?);";
     public static final String UPDATE_SESS = "UPDATE \"PUBLIC\".SESSIONS  SET exp_date=? WHERE session_id=?;";
+    public static final String UPDATE_USER_LAST_VISIT = "UPDATE \"PUBLIC\".USERS  SET last_visit=? WHERE id=?;";
     
     
     @Autowired
@@ -65,7 +66,7 @@ public class UserDao {
                         rs.getString("login"),
                         rs.getString("pass"),
                         rs.getString("active_flag"),
-                        rs.getDate("last_visit")
+                        rs.getTimestamp("last_visit")
                 );
                 
                 list.add(user);
@@ -111,13 +112,14 @@ public class UserDao {
                         rs.getString("login"),
                         rs.getString("pass"),
                         rs.getString("active_flag"),
-                        rs.getDate("last_visit")
+                        rs.getTimestamp("last_visit")
                 );
             }
             
             if(user!=null) {
                 sessionId = createSession(conn, user.getId(), user.getLogin());
                 user.setSessionId(sessionId);
+                updateLastUserVisit(conn, user.getId());
             }
             
             conn.commit();
@@ -285,6 +287,31 @@ public class UserDao {
             statement = conn.prepareStatement(UPDATE_SESS);            
             statement.setTimestamp(1, expDate);
             statement.setString(2, sessId);
+            int res = statement.executeUpdate();
+            
+        } catch (SQLException ex) {
+            Logger.error("Error while get user: "+ex.getMessage());
+        } finally {
+            try {
+                if(statement!=null) statement.close();
+            } catch (SQLException ex) {
+                Logger.error("Error while connection resource release: "+ex.getMessage());
+            }
+        }
+
+    }
+    
+    public void updateLastUserVisit(Connection conn, int uId) {
+
+        PreparedStatement statement = null;
+        Date cDate = new Date();       
+        Timestamp tcDate = new Timestamp(cDate.getTime());
+        
+        try {
+ 
+            statement = conn.prepareStatement(UPDATE_USER_LAST_VISIT);            
+            statement.setTimestamp(1, tcDate);
+            statement.setInt(2, uId);
             int res = statement.executeUpdate();
             
         } catch (SQLException ex) {

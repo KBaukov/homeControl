@@ -6,6 +6,7 @@
 package ru.strobo.sh.data;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 /**
  *
@@ -19,9 +20,9 @@ public class User {
     private String pass;
     private String activeFlag;
     private String sessionId;
-    private Date lastVisit;
+    private Timestamp lastVisit;
 
-    public User(Integer id, String userType, String login, String pass, String activeFlag, Date lastVisit) {
+    public User(Integer id, String userType, String login, String pass, String activeFlag, Timestamp lastVisit) {
         this.id = id;
         this.userType = userType;
         this.login = login;
@@ -84,11 +85,11 @@ public class User {
         this.sessionId = sessionId;
     }
 
-    public Date getLastVisit() {
+    public Timestamp getLastVisit() {
         return lastVisit;
     }
 
-    public void setLastVisit(Date lastVisit) {
+    public void setLastVisit(Timestamp lastVisit) {
         this.lastVisit = lastVisit;
     }
     

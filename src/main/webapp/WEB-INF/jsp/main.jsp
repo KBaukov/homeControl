@@ -25,7 +25,7 @@
         <script type="text/javascript" src="/js/main/Devices.js"></script>
         <script type="text/javascript" src="/js/main/Users.js"></script>
         <script type="text/javascript" src="/js/main/ControlTab.js"></script>
-        <script type="text/javascript">var user = '${uName}';</script>
+        <script type="text/javascript">var user = ${uName};</script>
         <title>HOME Controll</title>
     </head>    
     <body id="boby"><div id="vp"></div></body>

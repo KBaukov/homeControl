@@ -33,15 +33,17 @@ public class HomeController {
         
         HttpSession sess =  request.getSession();
         Object Auth = sess.getAttribute("Auth");
+        User user = (User) sess.getAttribute("User");
         
         Logger.info("Incomming http request in home.");
         
-        if( Auth == null ) {
+        if( Auth == null || user == null) {
             Logger.info("Redirect to login.");
             response.setHeader("Location", "/home/login");
             response.setStatus(302);
             return "login";
         } else {
+            model.addAttribute("uName", "{login:'" + user.getLogin() + "', userType:'" + user.getUserType() + "'}");
             return "main";
         }
     }
@@ -84,7 +86,6 @@ public class HomeController {
             Logger.info("Redirect to home.");
             response.setHeader("Location", "/home");
             response.setStatus(302);
-            model.addAttribute("uName", uName);
             return "main";
         }
 
