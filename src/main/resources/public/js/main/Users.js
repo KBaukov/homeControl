@@ -22,7 +22,7 @@ Ext.define('Users', {
           {header: 'ID', align: 'left', width: 70, dataIndex: 'id' },
           {header: 'Тип пользователя', align: 'left', width: 110, dataIndex: 'user_type' },
           {header: 'Login', align: 'left', width: 100, dataIndex: 'login' },
-          {header: 'Статус', align: 'left', width: 110, dataIndex: 'activ_flag', renderer: this.statusRenderer },
+          {header: 'Статус', align: 'left', width: 110, dataIndex: 'active_flag', renderer: this.statusRenderer },
           {header: 'Дата последнего визита', align: 'left', width: 200, dataIndex: 'last_visit', renderer: Ext.util.Format.dateRenderer('d.m.Y H:i:s') }
       ];
     },  
@@ -45,7 +45,7 @@ Ext.define('Users', {
               {name: 'user_type'},
               {name: 'login'}, 
               //{name: 'pass'}, 
-              {name: 'activ_flag'},
+              {name: 'active_flag'},
               {name: 'last_visit'}
             ]
         });

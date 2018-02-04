@@ -24,10 +24,15 @@ public class KotelBean {
     private float t1;
     private float t2;
     private float t3;
+    private float h1;
+    private float h2;
+    private float h3;
     private float destTp;
     private float destTo;
     private float destTc;
     private int destKw;
+    
+    private int wait;
     
     private String controlCommand;
     
@@ -45,6 +50,13 @@ public class KotelBean {
         this.t1 = 20.00f;
         this.t2 = 20.00f;
         this.t3 = 20.00f;
+        
+        this.h1 = 20.00f;
+        this.h2 = 20.00f;
+        this.h3 = 20.00f;
+        
+        this.wait = 30000;
+        
         this.controlCommand = "";
     }
 
@@ -97,7 +109,29 @@ public class KotelBean {
         this.t3 = t3;
     }
 
-    
+    public float getH1() {
+        return h1;
+    }
+
+    public void setH1(float h1) {
+        this.h1 = h1;
+    }
+
+    public float getH2() {
+        return h2;
+    }
+
+    public void setH2(float h2) {
+        this.h2 = h2;
+    }
+
+    public float getH3() {
+        return h3;
+    }
+
+    public void setH3(float h3) {
+        this.h3 = h3;
+    }
     
     public float getDestTp() {
         return destTp;
@@ -137,6 +171,14 @@ public class KotelBean {
 
     public void setControlCommand(String controlCommand) {
         this.controlCommand = controlCommand;
+    }
+
+    public int getWait() {
+        return wait;
+    }
+
+    public void setWait(int wait) {
+        this.wait = wait;
     }
     
     public String toJson() {

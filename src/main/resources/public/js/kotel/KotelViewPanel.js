@@ -18,6 +18,8 @@ Ext.define('KotelViewPanel', {
         this.tp = 0;
         this.to = 0;
         this.t1 = 0;
+        this.t2 = 0;
+        this.t3 = 0;
         this.kw = 0;
         dtLock = true;
         this.destt = 0;
@@ -72,7 +74,11 @@ Ext.define('KotelViewPanel', {
                 '</br></br></br><div>Температура воздуха на кухне</div>'+
                 '</br><div><div class="prText" style="float:left">0°</div><div class="prText" style="float:right">100°</div></div></br>' +
                 '<div class="shLine" id="metka4" style="top:242px;">19.44°<div></div></div>'+
-                '<div class="fillPr" id="gradusnik3"><div class="fillPrG" id="shkala3" style="width:100px"></div></div>';
+                '<div class="fillPr" id="gradusnik3"><div class="fillPrG" id="shkala3" style="width:100px"></div></div>'
+                '</br></br></br><div>Температура воздуха в спальне второго этажа</div>'+
+                '</br><div><div class="prText" style="float:left">0°</div><div class="prText" style="float:right">100°</div></div></br>' +
+                '<div class="shLine" id="metka5" style="top:339px;">0.00°<div></div></div>'+
+                '<div class="fillPr" id="gradusnik4"><div class="fillPrG" id="shkala4" style="width:100px"></div></div>';
         
         this.tbar = [
             { text: ' Целевое значение: ', xtype: 'text'},
@@ -113,6 +119,12 @@ Ext.define('KotelViewPanel', {
         m4.innerHTML = '<div></div>'+this.t1.toFixed(2)+'°';
         var sh3 = document.getElementById("shkala3");
         sh3.style.width = parseInt(baseW*this.t1/100) +'px';
+        
+        var m5 = document.getElementById("metka5");
+        m5.style.left = parseInt(baseW*this.t2/100 - 9) +'px';
+        m5.innerHTML = '<div></div>'+this.t2.toFixed(2)+'°';
+        var sh4 = document.getElementById("shkala4");
+        sh4.style.width = parseInt(baseW*this.t2/100) +'px';
     },
     getValues: function() {
         Ext.Ajax.request({
@@ -123,6 +135,8 @@ Ext.define('KotelViewPanel', {
                   this.tp = parseFloat(ansv.tp);
                   this.to = parseFloat(ansv.to);
                   this.t1 = parseFloat(ansv.t1);
+                  this.t2 = parseFloat(ansv.t2);
+                  this.t3 = parseFloat(ansv.t3);
                   this.destt = parseFloat(ansv.desttc);
                   
                   this.papa.kotelControlPanel.currVal[0]=parseInt(ansv.tp)+"";

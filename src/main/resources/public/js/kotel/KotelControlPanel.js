@@ -198,7 +198,7 @@ Ext.define('KotelControlPanel', {
                     icon: Ext.MessageBox.INFO,
                     fn: null
                 });
-                this.command = '';
+                //this.command = '';
               } else error_mes('Ошибка', 'ErrorCode:'+ansv.error.errorCode+"; "+ansv.error.errorMessage);  
             },
             failure: function() { }

@@ -1,7 +1,7 @@
 Ext.define('KotelTabPanel', {
     extend: 'Ext.tab.Panel',   
     region: 'center',
-    title: 'Котел',   
+    title: 'Отопление',   
     //layout: 'border',
     border: false, frame: false,
     initComponent: function() {
