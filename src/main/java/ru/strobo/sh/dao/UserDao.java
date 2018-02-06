@@ -100,7 +100,7 @@ public class UserDao {
             conn = ds.getConnection();
  
             statement = conn.prepareStatement(GET_USER);            
-            statement.setString(1, login);
+            statement.setString(1, login.toLowerCase());
             statement.setString(2, pass);
             
             rs = statement.executeQuery();

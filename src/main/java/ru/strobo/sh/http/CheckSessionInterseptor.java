@@ -56,7 +56,10 @@ public class CheckSessionInterseptor extends HandlerInterceptorAdapter {
         if(uDao.checkSession(sessId)) {
             return true;
         } else {
-            response.setStatus(403);
+            sess.removeAttribute("Auth");
+            sess.removeAttribute("User");
+            sess.removeAttribute("SessID");
+            response.setStatus(401);
             return false;
         }
     }

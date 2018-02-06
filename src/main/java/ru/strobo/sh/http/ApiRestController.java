@@ -108,12 +108,9 @@ public class ApiRestController {
             @RequestParam(value="to", defaultValue="0", required = true) String to,
             @RequestParam(value="kw", defaultValue="0", required = true) String kw
     ) {
-        Logger.info("Incoming http request: /ctrl: "
-//                + "{desttp=" + destTp 
-//                + ",destto=" + destTo 
-//                + ",destkw=" + destKw 
-                + ",tp=" + tp + ", to=" + to+ ", kw=" + kw
-        + "}");
+        Logger.info("Incoming http request: /ctrl: { "
+                + "tp=" + tp + ", to=" + to+ ", kw=" + kw
+        + " }");
         
         kotel.setTp(Float.valueOf(tp));
         kotel.setTo(Float.valueOf(to));        
@@ -145,7 +142,7 @@ public class ApiRestController {
     ) {
         Logger.info("Incoming http request: /rooms/setvalues: {"
                 + "t1=" + t1 + ", t2=" + t2 + ", t3=" + t3 
-                + ",h1=" + h1 + ", h2=" + h2 + ", h3=" + h3 
+                + ", h1=" + h1 + ", h2=" + h2 + ", h3=" + h3 
         + "}");
         
         kotel.setT1(Float.valueOf(t1));
@@ -158,25 +155,25 @@ public class ApiRestController {
         return "{success:true}";
     }
     
-    @RequestMapping(value = "/ctrlc", method = GET,  produces = "application/json;charset=UTF-8" )
-    public String ctrlCommand(
-            @RequestParam(value="destt", defaultValue="0", required = true) String destT,
-            @RequestParam(value="tp", defaultValue="0" , required = true) String tp,
-            @RequestParam(value="to", defaultValue="0", required = false) String to,
-            @RequestParam(value="t1", defaultValue="0", required = false) String t1
-    ) {
-        Logger.info("Incoming http request: /ctrlc: {dest=" + destT + ", tp=" + tp + ", to=" + to + ", t1=" + t1 + "}");
-        
-        kotel.setTp(Float.valueOf(tp));
-        kotel.setTo(Float.valueOf(to));    
-        kotel.setT1(Float.valueOf(t1));    
-        String comm = kotel.getControlCommand();
-        kotel.setControlCommand("");
-        return "{success:true,"
-                + "destT:"+ kotel.getDestTp()+","
-                + "comm:\"" + comm + "\""
-                + "}";
-    }
+//    @RequestMapping(value = "/ctrlc", method = GET,  produces = "application/json;charset=UTF-8" )
+//    public String ctrlCommand(
+//            @RequestParam(value="destt", defaultValue="0", required = true) String destT,
+//            @RequestParam(value="tp", defaultValue="0" , required = true) String tp,
+//            @RequestParam(value="to", defaultValue="0", required = false) String to,
+//            @RequestParam(value="t1", defaultValue="0", required = false) String t1
+//    ) {
+//        Logger.info("Incoming http request: /ctrlc: {dest=" + destT + ", tp=" + tp + ", to=" + to + ", t1=" + t1 + "}");
+//        
+//        kotel.setTp(Float.valueOf(tp));
+//        kotel.setTo(Float.valueOf(to));    
+//        kotel.setT1(Float.valueOf(t1));    
+//        String comm = kotel.getControlCommand();
+//        kotel.setControlCommand("");
+//        return "{success:true,"
+//                + "destT:"+ kotel.getDestTp()+","
+//                + "comm:\"" + comm + "\""
+//                + "}";
+//    }
     
     @RequestMapping(value = "/setdestt", method = GET,  produces = "application/json;charset=UTF-8" )
     public String setDestT(
@@ -213,7 +210,7 @@ public class ApiRestController {
     
     @RequestMapping(value = "/getvalues", method = GET,  produces = "application/json;charset=UTF-8" )
     public String getValues( ) {        
-        String tp = String.valueOf(kotel.getTp());
+        String tp = String.valueOf(kotel.getTp()-2);
         String to = String.valueOf(kotel.getTo());
         String t1 = String.valueOf(kotel.getT1());
         String t2 = String.valueOf(kotel.getT2());
