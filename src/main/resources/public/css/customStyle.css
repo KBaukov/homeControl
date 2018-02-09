@@ -291,6 +291,28 @@ div#rightButt:hover { background-position-y: bottom;}
 div#leftButt:hover { background-position-y: bottom;}
 div#okButt:hover { background-position-y: bottom;}
 
+
+div.tempIcon {
+    height: 48px;
+    width: 86px;
+    background-image: url("../img/temperature-48.png");
+    background-repeat: no-repeat;
+    background-position: left center;
+    position: absolute;
+    text-align: right;
+    color: #ff6600;
+}
+
+div#ht1 {
+    top: 100px;
+    left: 300px;
+}
+
+div#ht2 {
+    top: 200px;
+    left: 200px;
+}
+
 /*
 .x-grid3-cell-selected { border: #99BBE8 1px solid !important; }
 .x-grid3-cell  { border: #ffffff 1px solid !important; }

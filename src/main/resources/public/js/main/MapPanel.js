@@ -21,7 +21,9 @@ Ext.define('MapPanel', {
     },
     initForm: function() {
         this.papa = this.initConfig().papa;
-        this.html = '<div style="text-align:center"><img id="mapImage" src="/img/Map.png" /></div>';
+        this.html = '<div style="text-align:center"><img id="mapImage" src="/img/Map.png" /></div>' +
+                '<div class="tempIcon" id="ht1"></div>' +
+                '<div class="tempIcon" id="ht2"></div>';
         this.listeners = { scope: this,
             render: function() {
                 this.resizeImage();
@@ -40,5 +42,13 @@ Ext.define('MapPanel', {
             imgW = (h-40)*1.3;
         }        
         Ext.getDom('mapImage').width=imgW;
+        var imgH = imgW / 1.3;
+        var dw = (w - imgW) /2;
+        var ht1 =  Ext.getDom('ht1');
+        var ht2 =  Ext.getDom('ht2');
+        ht1.style.top = (20 + imgH *0.45)+'px';
+        ht2.style.top = (20 + imgH *0.30)+'px';
+        ht1.style.left = (dw + imgW *0.25)+'px';
+        ht2.style.left = (dw + imgW *0.52)+'px';
     }
 });

@@ -150,6 +150,9 @@ Ext.define('KotelViewPanel', {
                   }
                   this.papa.kotelControlPanel.dispCurrentView();
                   
+                  Ext.getDom('ht1').innerHTML = parseFloat(ansv.t1) +'°C</br></br>'+( (ansv.h1!='0.00') ? parseFloat(ansv.h1)+'%' : '');
+                  Ext.getDom('ht2').innerHTML = parseFloat(ansv.t2) +'°C</br></br>'+parseFloat(ansv.h2)+'%';
+                  
                   this.resize();
 
               } else error_mes('Ошибка', 'ErrorCode:'+ansv.error.errorCode+"; "+ansv.error.errorMessage);  
