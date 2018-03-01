@@ -74,11 +74,7 @@ Ext.define('KotelViewPanel', {
                 '</br></br></br><div>Температура воздуха на кухне</div>'+
                 '</br><div><div class="prText" style="float:left">0°</div><div class="prText" style="float:right">100°</div></div></br>' +
                 '<div class="shLine" id="metka4" style="top:242px;">19.44°<div></div></div>'+
-                '<div class="fillPr" id="gradusnik3"><div class="fillPrG" id="shkala3" style="width:100px"></div></div>'
-                '</br></br></br><div>Температура воздуха в спальне второго этажа</div>'+
-                '</br><div><div class="prText" style="float:left">0°</div><div class="prText" style="float:right">100°</div></div></br>' +
-                '<div class="shLine" id="metka5" style="top:339px;">0.00°<div></div></div>'+
-                '<div class="fillPr" id="gradusnik4"><div class="fillPrG" id="shkala4" style="width:100px"></div></div>';
+                '<div class="fillPr" id="gradusnik3"><div class="fillPrG" id="shkala3" style="width:100px"></div></div>';
         
         this.tbar = [
             { text: ' Целевое значение: ', xtype: 'text'},
@@ -120,11 +116,6 @@ Ext.define('KotelViewPanel', {
         var sh3 = document.getElementById("shkala3");
         sh3.style.width = parseInt(baseW*this.t1/100) +'px';
         
-        var m5 = document.getElementById("metka5");
-        m5.style.left = parseInt(baseW*this.t2/100 - 9) +'px';
-        m5.innerHTML = '<div></div>'+this.t2.toFixed(2)+'°';
-        var sh4 = document.getElementById("shkala4");
-        sh4.style.width = parseInt(baseW*this.t2/100) +'px';
     },
     getValues: function() {
         Ext.Ajax.request({
@@ -150,9 +141,11 @@ Ext.define('KotelViewPanel', {
                   }
                   this.papa.kotelControlPanel.dispCurrentView();
                   
-                  Ext.getDom('ht1').innerHTML = parseFloat(ansv.t1) +'°C</br></br>'+( (ansv.h1!='0.00') ? parseFloat(ansv.h1)+'%' : '');
-                  Ext.getDom('ht2').innerHTML = parseFloat(ansv.t2) +'°C</br></br>'+parseFloat(ansv.h2)+'%';
-                  
+                  if(Ext.getDom('ht1')) {
+                        Ext.getDom('ht1').innerHTML = parseFloat(ansv.t1) +'°C</br></br>'+( (ansv.h1!='0.00') ? parseFloat(ansv.h1)+'%' : '');
+                        Ext.getDom('ht2').innerHTML = parseFloat(ansv.t2) +'°C</br></br>'+parseFloat(ansv.h2)+'%';
+                        Ext.getDom('ht3').innerHTML = parseFloat(ansv.t3) +'°C</br></br>'+parseFloat(ansv.h3)+'%';
+                   }
                   this.resize();
 
               } else error_mes('Ошибка', 'ErrorCode:'+ansv.error.errorCode+"; "+ansv.error.errorMessage);  

@@ -16,8 +16,15 @@ Ext.onReady(function(){
   
   var MainPanel  = Ext.create('Ext.tab.Panel',{
     region: 'center',
-    items: [ MapPanel, ControlTab, SettingsTab ]
+    items: [ ControlTab, MapPanel, SettingsTab ]
   });
+  
+  MainPanel.listeners = { scope: MainPanel,
+    afterrender: function(){ 
+       this.setActiveTab(1);
+       this.setActiveTab(0);
+    }
+  };
   
   var delimHr = { xtype: 'box', html:'', style: 'border-bottom: 1px solid #99BCE8;', height: 5};
   var delim = { xtype: 'box', html:'',height: 5};
