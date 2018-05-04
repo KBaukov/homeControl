@@ -5,7 +5,9 @@
  */
 package ru.strobo.sh.http;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.slf4j.LoggerFactory;
@@ -14,12 +16,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.socket.TextMessage;
 import ru.strobo.sh.beans.KotelBean;
 import ru.strobo.sh.dao.DeviceDao;
 import ru.strobo.sh.dao.KotelDao;
 import ru.strobo.sh.dao.UserDao;
 import ru.strobo.sh.data.Device;
 import ru.strobo.sh.data.User;
+import ru.strobo.sh.ws.DeviceMessageHandler;
+import ru.strobo.sh.ws.DeviceSessionsHandler;
 
 /**
  *
@@ -40,6 +45,9 @@ public class ApiRestController {
     
     @Autowired
     KotelDao kDao;
+    
+    @Autowired
+    DeviceSessionsHandler sh;
     
     private static final org.slf4j.Logger Logger = LoggerFactory.getLogger(ApiRestController.class);
     
@@ -108,7 +116,7 @@ public class ApiRestController {
             @RequestParam(value="to", defaultValue="0", required = true) String to,
             @RequestParam(value="kw", defaultValue="0", required = true) String kw
     ) {
-        Logger.info("Incoming http request: /ctrl: { "
+        Logger.info("Incoming http request: /kotel/setvalues: { "
                 + "tp=" + tp + ", to=" + to+ ", kw=" + kw
         + " }");
         
@@ -145,12 +153,12 @@ public class ApiRestController {
                 + ", h1=" + h1 + ", h2=" + h2 + ", h3=" + h3 
         + "}");
         
-        kotel.setT1(Float.valueOf(t1));
-        kotel.setT2(Float.valueOf(t2));    
-        kotel.setT3(Float.valueOf(t3));    
-        kotel.setH1(Float.valueOf(h1));
-        kotel.setH2(Float.valueOf(h2));    
-        kotel.setH3(Float.valueOf(h3));    
+//        kotel.setT1(Float.valueOf(t1));
+//        kotel.setT2(Float.valueOf(t2));    
+//        kotel.setT3(Float.valueOf(t3));    
+//        kotel.setH1(Float.valueOf(h1));
+//        kotel.setH2(Float.valueOf(h2));    
+//        kotel.setH3(Float.valueOf(h3));    
         
         return "{success:true}";
     }
@@ -180,12 +188,14 @@ public class ApiRestController {
             @RequestParam(value="desttp", required = false) String destTp,
             @RequestParam(value="destto", required = false) String destTo,
             @RequestParam(value="desttc", required = false) String destTc,
-            @RequestParam(value="destkw", required = false) String destKw
+            @RequestParam(value="destkw", required = false) String destKw,
+            @RequestParam(value="destpr", required = false) String destPr
     ) {
         if(destTp!=null) kotel.setDestTp(Float.valueOf(destTp));
         if(destTo!=null) kotel.setDestTo(Float.valueOf(destTo));
         if(destTc!=null) kotel.setDestTc(Float.valueOf(destTc));
         if(destKw!=null) kotel.setDestKw(Integer.valueOf(destKw));
+        if(destPr!=null) kotel.setDestPr(Float.valueOf(destPr));
         
         kDao.setAllSetings();
         
@@ -194,7 +204,22 @@ public class ApiRestController {
                 + " ,destTo:" + kotel.getDestTo()
                 + " ,destTc:" + kotel.getDestTc()
                 + " ,destKw:" + kotel.getDestKw()
+                + " ,destPr:" + kotel.getDestPr()
         +" ]");
+        
+        try {
+            sh.getSession(sh.getKotelControllerId()).sendMessage(
+                    new TextMessage("{action:setDestination"
+                            +", destTo:"+kotel.getDestTo()
+                            +", destTp:"+kotel.getDestTp()
+                            +", destTc:"+kotel.getDestTc()
+                            +", destKw:"+kotel.getDestKw()
+                            +", destPr:"+kotel.getDestPr()
+                    +" }")
+            );
+        } catch (IOException ex) {
+            Logger.error("Erro while send destination vavues to kotel controller: " + ex.getMessage());
+        }
         
         return "{success:true}";
     }
@@ -203,8 +228,16 @@ public class ApiRestController {
     public String setComm(
             @RequestParam(value="comm", required = true) String comm
     ) {
-        kotel.setControlCommand(comm);
-        Logger.info("Control command setted in " + comm);
+        
+       try {
+            sh.getSession(sh.getKotelControllerId()).sendMessage(
+                    new TextMessage("{action:setCommand, command:\""+comm+"\" }")
+            );
+        } catch (IOException ex) {
+            Logger.error("Erro while send coomand to kotel controller: " + ex.getMessage());
+        }
+        //kotel.setControlCommand(comm);
+        Logger.info("Control command sendet to controller: " + comm);
         return "{success:true}";
     }
     
@@ -212,6 +245,11 @@ public class ApiRestController {
     public String getValues( ) {        
         String tp = String.valueOf(kotel.getTp()-2);
         String to = String.valueOf(kotel.getTo());
+        String destTp = String.valueOf(kotel.getDestTp());
+        String destTo = String.valueOf(kotel.getDestTo());
+        String destTc = String.valueOf(kotel.getDestTc());
+        String destKw = String.valueOf(kotel.getDestKw());
+        
         String t1 = String.valueOf(kotel.getT1());
         String t2 = String.valueOf(kotel.getT2());
         String t3 = String.valueOf(kotel.getT3());
@@ -219,16 +257,30 @@ public class ApiRestController {
         String h2 = String.valueOf(kotel.getH2());
         String h3 = String.valueOf(kotel.getH3());
         String kw = String.valueOf(kotel.getKw());
-        String destTp = String.valueOf(kotel.getDestTp());
-        String destTo = String.valueOf(kotel.getDestTo());
-        String destTc = String.valueOf(kotel.getDestTc());
-        String destKw = String.valueOf(kotel.getDestKw());
+        String pr = String.valueOf(kotel.getPr());
+        
         return "{success:true"
-                + ",tp:" + tp + ",to:" + to + ",kw:" + kw 
+                + ",tp:" + tp + ",to:" + to + ",kw:" + kw + ",pr:" + pr 
                 + ",t1:" + t1 + ",t2:" + t2 + ",t3:" + t3
                 + ",h1:" + h1 + ",h2:" + h2 + ",h3:" + h3
-                + ",desttp:" + destTp + ",destto:" + destTo + ",desttc:" + destTc + ",destkw:" + destKw 
+                + ",desttp:" + destTp + ",destto:" + destTo 
+                + ",desttc:" + destTc + ",destkw:" + destKw 
         + "}";
+    }
+    
+    @RequestMapping(value = "/sendmessage", method = GET,  produces = "application/json;charset=UTF-8" )
+    public String sendMessage(
+            @RequestParam(value="msg", required = true) String message
+    ) {
+        
+        try {
+            sh.getSession("ESP_DF340A").sendMessage(new TextMessage("{success:true,command:\"LLMRRRRRMRR\", data:[{ksdjksjd:\"sds\"}]}"));
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(ApiRestController.class.getName()).log(Level.SEVERE, null, ex);
+            return "{ success: false }";
+        }
+        
+        return "{ success: true }";
     }
     
 }

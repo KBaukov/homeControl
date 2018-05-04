@@ -9,6 +9,13 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.strobo.sh.dao.KotelDao;
+import ru.strobo.sh.data.KotelData;
+import ru.strobo.sh.data.RoomData;
+import ru.strobo.sh.data.Device;
+import java.util.Map;
+import java.util.List;
+import ru.strobo.sh.dao.DeviceDao;
+import ru.strobo.sh.ws.DeviceSessionsHandler;
 
 /**
  *
@@ -20,17 +27,25 @@ public class KotelBean {
     
     private float tp;
     private float to;
+    private float pr;
     private int kw;
-    private float t1;
-    private float t2;
-    private float t3;
-    private float h1;
-    private float h2;
-    private float h3;
+    
     private float destTp;
     private float destTo;
     private float destTc;
     private int destKw;
+    private float destPr;
+    
+    private Map<String, RoomData> roomData;
+    private Map<Integer, String> roomDataMap;
+    
+//    private float t1;
+//    private float t2;
+//    private float t3;
+//    private float h1;
+//    private float h2;
+//    private float h3;
+    
     
     private int wait;
     
@@ -38,22 +53,31 @@ public class KotelBean {
     
     @Autowired
     KotelDao kotelDao;
+    
+    @Autowired
+    DeviceDao dDao;
+    
+    @Autowired
+    DeviceSessionsHandler sh;
 
     @PostConstruct
     public void init() {
         
         kotelDao.getAllSetings();
         
+        getDevices();
+        
         this.tp = 34.55f;
         this.to = 59.15f;
         this.kw = 11;
-        this.t1 = 20.00f;
-        this.t2 = 20.00f;
-        this.t3 = 20.00f;
-        
-        this.h1 = 20.00f;
-        this.h2 = 20.00f;
-        this.h3 = 20.00f;
+        this.pr = 2.2f;
+//        this.t1 = 20.00f;
+//        this.t2 = 20.00f;
+//        this.t3 = 20.00f;
+//        
+//        this.h1 = 20.00f;
+//        this.h2 = 20.00f;
+//        this.h3 = 20.00f;
         
         this.wait = 30000;
         
@@ -84,53 +108,42 @@ public class KotelBean {
         this.kw = kw;
     }
 
-    
-    public float getT1() {
-        return t1;
+    public float getPr() {
+        return pr;
     }
 
-    public void setT1(float t1) {
-        this.t1 = t1;
+    public void setPr(float pr) {
+        this.pr = pr;
+    }
+
+    public float getT1() {
+        RoomData rd = roomData.get(roomDataMap.get(1));                
+        return rd.getT();
     }
 
     public float getT2() {
-        return t2;
-    }
-
-    public void setT2(float t2) {
-        this.t2 = t2;
+        RoomData rd = roomData.get(roomDataMap.get(2));                
+        return rd.getT();
     }
 
     public float getT3() {
-        return t3;
-    }
-
-    public void setT3(float t3) {
-        this.t3 = t3;
+        RoomData rd = roomData.get(roomDataMap.get(3));                
+        return rd.getT();
     }
 
     public float getH1() {
-        return h1;
-    }
-
-    public void setH1(float h1) {
-        this.h1 = h1;
+        RoomData rd = roomData.get(roomDataMap.get(1));                
+        return rd.getH();
     }
 
     public float getH2() {
-        return h2;
-    }
-
-    public void setH2(float h2) {
-        this.h2 = h2;
+        RoomData rd = roomData.get(roomDataMap.get(2));                
+        return rd.getH();
     }
 
     public float getH3() {
-        return h3;
-    }
-
-    public void setH3(float h3) {
-        this.h3 = h3;
+        RoomData rd = roomData.get(roomDataMap.get(3));                
+        return rd.getH();
     }
     
     public float getDestTp() {
@@ -164,6 +177,14 @@ public class KotelBean {
     public void setDestKw(int destKw) {
         this.destKw = destKw;
     }
+
+    public float getDestPr() {
+        return destPr;
+    }
+
+    public void setDestPr(float destPr) {
+        this.destPr = destPr;
+    }
     
     public String getControlCommand() {
         return controlCommand;
@@ -181,8 +202,31 @@ public class KotelBean {
         this.wait = wait;
     }
     
+    private void getDevices() {
+        List<Device> dd = dDao.getDevices();
+        for(Device d : dd) {
+            roomDataMap.put(d.getId(), d.getName());
+            if(d.getType().equals("KotelController"))
+                sh.setKotelControllerId(d.getName());
+        }
+    }
+    
     public String toJson() {
         return "";
     }
     
+    public void setKotelMeshData(KotelData data) {
+        
+        tp = data.getTp();
+        to = data.getTo();
+        kw = data.getKw();
+        pr = data.getPr();
+        
+    }
+    
+    public void setRoomsData(RoomData data) {
+        
+        roomData.put(data.getDeviceId(), data);
+        
+    }
 }
