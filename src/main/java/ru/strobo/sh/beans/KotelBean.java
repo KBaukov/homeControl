@@ -5,6 +5,7 @@
  */
 package ru.strobo.sh.beans;
 
+import java.util.HashMap;
 import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -36,8 +37,8 @@ public class KotelBean {
     private int destKw;
     private float destPr;
     
-    private Map<String, RoomData> roomData;
-    private Map<Integer, String> roomDataMap;
+    private Map<String, RoomData> roomData = new HashMap<String, RoomData>();
+    private Map<Integer, String> roomDataMap = new HashMap<Integer, String>();
     
 //    private float t1;
 //    private float t2;
