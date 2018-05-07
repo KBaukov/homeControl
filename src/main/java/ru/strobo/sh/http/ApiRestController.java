@@ -96,16 +96,21 @@ public class ApiRestController {
         return "{ success: true, data:[" + data.substring(1) + "]}";
     }
     
-//    @RequestMapping(value = "/devlist", method = GET,  produces = "application/json;charset=UTF-8" )
-//    public String getDevList() {
-//        String data = "";
-//        List<Device> devices = dDao.getDevices();
-//        
-//        for(Device d : devices)
-//            data += "," + d.toJson();
-//        
-//        return "{ success: true, data: [ " + data.substring(1) + " ] }";
-//    }
+    @RequestMapping(value = "/device/edit", method = GET,  produces = "application/json;charset=UTF-8" )
+    public String getDevEdit(
+            @RequestParam(value="id", required = true) String id,
+            @RequestParam(value="type",  required = true) String type,
+            @RequestParam(value="name",  required = true) String name,
+            @RequestParam(value="ip",  required = true) String ip,
+            @RequestParam(value="active_flag",  required = true) String activeFlag,
+            @RequestParam(value="description",  required = true) String description,
+            HttpServletRequest   request
+    ) {
+        if(dDao.editDevice(Integer.valueOf(id), type, name, ip, activeFlag, ip) ) {
+            return "{ success: true }";
+        } else       
+            return "{ success: false }";
+    }
     
     @RequestMapping(value = "/kotel/setvalues", method = GET,  produces = "application/json;charset=UTF-8" )
     public String ctrl(
@@ -238,6 +243,23 @@ public class ApiRestController {
         }
         //kotel.setControlCommand(comm);
         Logger.info("Control command sendet to controller: " + comm);
+        return "{success:true}";
+    }
+    
+    @RequestMapping(value = "/pressbutt", method = GET,  produces = "application/json;charset=UTF-8" )
+    public String pressbButt(
+            @RequestParam(value="button", required = true) String butt
+    ) {
+        
+       try {
+            sh.getSession(sh.getKotelControllerId()).sendMessage(
+                    new TextMessage("{\"action\":\"pessButton\", \"butt\":\""+butt+"\" }")
+            );
+        } catch (IOException ex) {
+            Logger.error("Erro while send coomand to kotel controller: " + ex.getMessage());
+        }
+        //kotel.setControlCommand(comm);
+        Logger.info("Control command sended to controller: " + butt);
         return "{success:true}";
     }
     

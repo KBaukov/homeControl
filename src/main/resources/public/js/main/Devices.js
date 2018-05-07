@@ -15,20 +15,36 @@ Ext.define('Devices', {
         this.collapsed = false;
         this.resizable = true;
         
+        this.selectedRec = null;
+        
         this.initData();
         this.initColumns();
+        //this.initForm();
 
         Devices.superclass.initComponent.apply(this, arguments);
     },
     initColumns: function() {
-      this.columns = [            
+        
+        this.columns = [            
             {header: 'ID', align: 'left', width: 40, dataIndex: 'id', flex: 1 }, 
-            {header: 'Тип устройства', align: 'left', width: 120, dataIndex: 'type' },
-            {header: 'Имя', align: 'left', width: 160, dataIndex: 'name' },
-            {header: 'IP адрес', align: 'left', width: 160, dataIndex: 'ip' },
-            {header: 'Статус', align: 'left', width: 110, dataIndex: 'active_flag', renderer: this.statusRenderer },
-            {header: 'Описание', align: 'left', width: 500, dataIndex: 'description' }
-      ];
+            {header: 'Тип устройства', align: 'left', width: 120, dataIndex: 'type', editor: new Ext.form.TextField({ allowBlank: false }) },
+            {header: 'Имя', align: 'left', width: 160, dataIndex: 'name', editor: new Ext.form.TextField({ allowBlank: false })  },
+            {header: 'IP адрес', align: 'left', width: 160, dataIndex: 'ip', editor: new Ext.form.TextField({ allowBlank: false })  },
+            {header: 'Статус', align: 'left', width: 110, dataIndex: 'active_flag', renderer: this.statusRenderer, editor: new Ext.form.TextField({ allowBlank: false })  },
+            {header: 'Описание', align: 'left', width: 500, dataIndex: 'description', editor: new Ext.form.TextField({ allowBlank: true })  }
+        ];
+        this.plugins = [ Ext.create('Ext.grid.plugin.CellEditing', { clicksToEdit: 2 }) ];
+        this.bbar = [
+            Ext.create('Ext.Button', {text: 'Сохранить изменения', scope: this, disabled: false, id: 'editButt',
+                style: 'background-position: bottom center;', 
+                handler: function() { this.saveData(); }
+            })//,
+//            '->', '-',
+//            Ext.create('Ext.Button', {text: 'Применить', scope: this, disabled: false, id: 'execButt',
+//                style: 'background-position: bottom center;', 
+//                handler: function() { this.sendCommands(); }
+//            })            
+        ];
     },
     initData: function() {
       this.papa = this.initConfig().papa;
@@ -48,6 +64,44 @@ Ext.define('Devices', {
             {name: 'active_flag'}, {name: 'description'}
           ]//,
       });
+      
+    },
+    initForm: function () {
+        this.editForm = Ext.create('Ext.form.Panel', {
+            //title: 'Basic Form',
+            bodyPadding: 5,
+            width: 350,
+            items: [
+                {
+                    xtype: 'textfield',
+                    fieldLabel: 'Тип устройства',
+                    name: 'type'
+                }
+            ]
+        });
+        this.editWin = Ext.create('Ext.window.Window', {
+            title: 'Форма редактирования устройства',
+            height: 400, width: 400, layout: 'fit', modal: true,
+            items: [  
+                this.editForm
+            ],
+            buttons: [ 
+                {
+                    text: 'Сохранить',
+                    scope: this,
+                    handler: this.saveData
+                },{
+                    text: 'Отмена',
+                    handler: this.closeWin
+                }
+            ]
+        });
+    },
+    closeWin: function() { 
+        this.editWin.close(); 
+    },
+    saveData: function() { 
+        var i = 0;
     },
     loadData: function(subsId, start, cnt) { 
       this.mask();

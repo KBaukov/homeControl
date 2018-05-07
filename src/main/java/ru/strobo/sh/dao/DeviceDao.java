@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -27,7 +28,7 @@ public class DeviceDao {
     private static final org.slf4j.Logger Logger = LoggerFactory.getLogger(DeviceDao.class);
     
     public static final String GET_DEVICES = "SELECT * FROM \"PUBLIC\".DEVICES;";
-    //public static final String GET_USER = "SELECT * FROM \"PUBLIC\".USERS WHERE login=? AND pass=?;";
+    public static final String EDIT_DEVICE = "UPDATE \"PUBLIC\".DEVICES SET type = ?, name = ?, ip = ?, active_flag = ?, description = ? WHERE login=?;";
     
     
     @Autowired
@@ -74,6 +75,48 @@ public class DeviceDao {
         }
         
         return list;
+    }
+    
+    public boolean editDevice(int deviceID, String type, String name, String ip, String isActive, String descr) {
+        
+        Connection conn = null;
+        PreparedStatement statement = null;
+        ResultSet rs = null;
+        
+        try {
+            conn = ds.getConnection();
+ 
+            statement = conn.prepareStatement(EDIT_DEVICE);
+            statement.setString(1, type);
+            statement.setString(2, name);
+            statement.setString(3, ip);
+            statement.setString(4, isActive);
+            statement.setString(5, descr);
+            statement.setInt(6, deviceID);
+            
+            statement.executeUpdate();
+            
+            conn.commit();
+           
+        } catch (SQLException ex) {
+            Logger.error("Error while get users: "+ex.getMessage());
+            try {
+                conn.rollback();
+            } catch (SQLException ex1) {
+                java.util.logging.Logger.getLogger(DeviceDao.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+            return false;
+        } finally {
+            try {
+                if(rs!=null) rs.close();
+                if(statement!=null) statement.close();
+                if(conn!=null) conn.close();
+            } catch (SQLException ex) {
+                Logger.error("Error while connection resource release: "+ex.getMessage());
+            }
+        }
+        
+        return true;
     }
     
     
