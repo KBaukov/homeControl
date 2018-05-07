@@ -97,16 +97,25 @@ public class ApiRestController {
     }
     
     @RequestMapping(value = "/device/edit", method = GET,  produces = "application/json;charset=UTF-8" )
-    public String getDevEdit(
+    public String editDevise(
             @RequestParam(value="id", required = true) String id,
             @RequestParam(value="type",  required = true) String type,
             @RequestParam(value="name",  required = true) String name,
             @RequestParam(value="ip",  required = true) String ip,
             @RequestParam(value="active_flag",  required = true) String activeFlag,
-            @RequestParam(value="description",  required = true) String description,
-            HttpServletRequest   request
+            @RequestParam(value="description",  required = true) String description
     ) {
-        if(dDao.editDevice(Integer.valueOf(id), type, name, ip, activeFlag, ip) ) {
+        if(dDao.editDevice(Integer.valueOf(id), type, name, ip, activeFlag, description) ) {
+            return "{ success: true }";
+        } else       
+            return "{ success: false }";
+    }
+    
+    @RequestMapping(value = "/device/delete", method = GET,  produces = "application/json;charset=UTF-8" )
+    public String deleteDevice(
+            @RequestParam(value="id", required = true) String id
+    ) {
+        if(dDao.deleteDevice( Integer.valueOf(id) ) ) {
             return "{ success: true }";
         } else       
             return "{ success: false }";

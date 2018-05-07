@@ -68,6 +68,11 @@
             <version>4.3.14.RELEASE</version>
             <type>jar</type>
         </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-websocket</artifactId>
+            <!--version>7.0.52</version-->
+         </dependency>
     </dependencies>
     <build>
         <plugins>
