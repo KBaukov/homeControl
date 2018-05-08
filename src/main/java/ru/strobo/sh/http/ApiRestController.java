@@ -20,8 +20,11 @@ import org.springframework.web.socket.TextMessage;
 import ru.strobo.sh.beans.KotelBean;
 import ru.strobo.sh.dao.DeviceDao;
 import ru.strobo.sh.dao.KotelDao;
+import ru.strobo.sh.dao.MapsDao;
 import ru.strobo.sh.dao.UserDao;
 import ru.strobo.sh.data.Device;
+import ru.strobo.sh.data.Map;
+import ru.strobo.sh.data.MapSensor;
 import ru.strobo.sh.data.User;
 import ru.strobo.sh.ws.DeviceMessageHandler;
 import ru.strobo.sh.ws.DeviceSessionsHandler;
@@ -42,6 +45,9 @@ public class ApiRestController {
     
     @Autowired
     DeviceDao dDao;
+    
+    @Autowired
+    MapsDao mDao;
     
     @Autowired
     KotelDao kDao;
@@ -82,7 +88,7 @@ public class ApiRestController {
         for(User u : users)
             data += "," + u.toJson();
         
-        return "{ success: true, data:[" + data.substring(1) + "]}";
+        return "{ success: true, data:[" + ( data.isEmpty() ? "" : data.substring(1) ) + "]}";
     }
     
     @RequestMapping(value = "/devices", method = GET,  produces = "application/json;charset=UTF-8" )
@@ -93,7 +99,7 @@ public class ApiRestController {
         for(Device d : devices)
             data += "," + d.toJson();
         
-        return "{ success: true, data:[" + data.substring(1) + "]}";
+        return "{ success: true, data:[" +( data.isEmpty() ? "" :  data.substring(1) ) + "]}";
     }
     
     @RequestMapping(value = "/device/edit", method = GET,  produces = "application/json;charset=UTF-8" )
@@ -119,6 +125,90 @@ public class ApiRestController {
             return "{ success: true }";
         } else       
             return "{ success: false }";
+    }
+    
+    @RequestMapping(value = "/maps", method = GET,  produces = "application/json;charset=UTF-8" )
+    public String getMaps() {
+        String data = "";
+        List<Map> maps = mDao.getMaps();
+        
+        for(Map m : maps)
+            data += "," + m.toJson();
+        
+        return "{ success: true, data:[" + ( data.isEmpty() ? "" : data.substring(1) ) + "]}";
+    }
+    
+    @RequestMapping(value = "/maps/edit", method = GET,  produces = "application/json;charset=UTF-8" )
+    public String editMap(
+            @RequestParam(value="id", required = true) String id,
+            @RequestParam(value="title",  required = true) String title,
+            @RequestParam(value="pict",  required = true) String pict,
+            @RequestParam(value="w",  required = true) String w,
+            @RequestParam(value="h",  required = true) String h,
+            @RequestParam(value="description",  required = true) String description
+    ) {
+        if(mDao.editMap(Integer.valueOf(id), title, pict, Integer.valueOf(w), Integer.valueOf(h), description) ) {
+            return "{ success: true }";
+        } else       
+            return "{ success: false }";
+    }
+    
+    @RequestMapping(value = "/maps/delete", method = GET,  produces = "application/json;charset=UTF-8" )
+    public String deleteMap(
+            @RequestParam(value="id", required = true) String id
+    ) {
+        if(mDao.deleteMap(Integer.valueOf(id) ) ) {
+            return "{ success: true }";
+        } else       
+            return "{ success: false }";
+    }
+    
+    @RequestMapping(value = "/sensors", method = GET,  produces = "application/json;charset=UTF-8" )
+    public String getSensors(
+            @RequestParam(value="map_id", required = true) String mapId
+    ) {
+        String data = "";
+        List<MapSensor> sensors = mDao.getSensors(Integer.valueOf(mapId));
+        
+        for(MapSensor s : sensors)
+            data += "," + s.toJson();
+        
+        
+        
+        return "{ success: true, data:[" + ( data.isEmpty() ? "" : data.substring(1) ) + "]}";
+    }
+    
+    @RequestMapping(value = "/sensors/edit", method = GET,  produces = "application/json;charset=UTF-8" )
+    public String editSensor(
+            @RequestParam(value="id", required = true) String id,
+            @RequestParam(value="map_id",  required = true) String mapId,
+            @RequestParam(value="dev_id",  required = true) String devId,
+            @RequestParam(value="type",  required = true) String type,
+            @RequestParam(value="pict",  required = true) String pict,
+            @RequestParam(value="xk",  required = true) String xk,
+            @RequestParam(value="yk",  required = true) String yk,
+            @RequestParam(value="description",  required = true) String description
+    ) {
+        if(mDao.editSensor(Integer.valueOf(id), Integer.valueOf(mapId), Integer.valueOf(devId), type, pict, Float.valueOf(xk), Float.valueOf(yk), description) ) {
+            return "{ success: true }";
+        } else       
+            return "{ success: false }";
+    }
+    
+    @RequestMapping(value = "/sensors/delete", method = GET,  produces = "application/json;charset=UTF-8" )
+    public String deleteSensor(
+            @RequestParam(value="id", required = true) String id
+    ) {
+        if(mDao.deleteSensor(Integer.valueOf(id) ) ) {
+            return "{ success: true }";
+        } else       
+            return "{ success: false }";
+    }
+    
+    @RequestMapping(value = "/sensors/lastid", method = GET,  produces = "application/json;charset=UTF-8" )
+    public String getSensorsLastId( ) {
+        int id = mDao.getSensorsLastId();
+        return "{ success: true, last_id: "+id+" }";
     }
     
     @RequestMapping(value = "/kotel/setvalues", method = GET,  produces = "application/json;charset=UTF-8" )

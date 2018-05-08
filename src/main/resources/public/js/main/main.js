@@ -12,7 +12,7 @@ Ext.onReady(function(){
   
   var ControlTab  = Ext.create('ControlTab');
   var SettingsTab  = Ext.create('SettingsTab');
-  var MapPanel  = Ext.create('MapPanel');
+  var MapPanel  = Ext.create('MapsTab');
   
   var MainPanel  = Ext.create('Ext.tab.Panel',{
     region: 'center',
