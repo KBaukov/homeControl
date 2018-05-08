@@ -52,7 +52,7 @@ public class RoomData {
     @Override
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        sb.append("***** Kotel Data Details *****\n");
+        sb.append("\n***** Room Data Details *****\n");
         sb.append("type="+type+"\n");
         sb.append("deviceId="+deviceId+"\n");
         sb.append("t="+t+"; "); sb.append("h="+h+"\n");

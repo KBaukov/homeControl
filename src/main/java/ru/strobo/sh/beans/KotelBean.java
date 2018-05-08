@@ -118,32 +118,32 @@ public class KotelBean {
     }
 
     public float getT1() {
-        RoomData rd = roomData.get(roomDataMap.get(1));                
+        RoomData rd = roomData.get(roomDataMap.get(0));                
         return rd== null ? 0 : rd.getT();
     }
 
     public float getT2() {
-        RoomData rd = roomData.get(roomDataMap.get(2));                
+        RoomData rd = roomData.get(roomDataMap.get(1));                
         return rd== null ? 0 : rd.getT();
     }
 
     public float getT3() {
-        RoomData rd = roomData.get(roomDataMap.get(3));                
+        RoomData rd = roomData.get(roomDataMap.get(2));                
         return rd== null ? 0 : rd.getT();
     }
 
     public float getH1() {
-        RoomData rd = roomData.get(roomDataMap.get(1));                
+        RoomData rd = roomData.get(roomDataMap.get(0));                
         return rd== null ? 0 : rd.getH();
     }
 
     public float getH2() {
-        RoomData rd = roomData.get(roomDataMap.get(2));                
+        RoomData rd = roomData.get(roomDataMap.get(1));                
         return rd== null ? 0 : rd.getH();
     }
 
     public float getH3() {
-        RoomData rd = roomData.get(roomDataMap.get(3));                
+        RoomData rd = roomData.get(roomDataMap.get(2));                
         return rd== null ? 0 : rd.getH();
     }
     
