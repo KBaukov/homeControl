@@ -12,8 +12,6 @@ Ext.define('MapsGrid', {
         this.id = 'mapsGrid';
         this.count = 0;
         this.lastId = 0;
-        this.collapsible = true;
-        this.collapsed = false;
         this.resizable = true;
         
         this.selectedRec = null;
@@ -92,7 +90,9 @@ Ext.define('MapsGrid', {
         select: {
             scope: this,
             fn: function( gr, record, index, eOpts ) { 
-                 this.papa.mapSensorGrid.loadData(record.data.id);
+                var data = record.data;
+                this.papa.mapSensorGrid.loadData(record.data.id, data);
+                 
             }
         }
     };

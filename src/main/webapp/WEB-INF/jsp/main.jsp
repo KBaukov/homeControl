@@ -27,6 +27,7 @@
         <script type="text/javascript" src="/js/maps/MapsTab.js"></script>
         <script type="text/javascript" src="/js/maps/MapsGrid.js"></script>
         <script type="text/javascript" src="/js/maps/MapSensorsGrid.js"></script>
+        <script type="text/javascript" src="/js/maps/MapTemplate.js"></script>
         <script type="text/javascript" src="/js/maps/MapsCtrl.js"></script>
         <script type="text/javascript" src="/js/main/ControlTab.js"></script>
         <script type="text/javascript">var user = ${uName};</script>

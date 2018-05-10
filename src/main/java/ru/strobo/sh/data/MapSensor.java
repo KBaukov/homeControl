@@ -19,7 +19,7 @@ public class MapSensor {
     private float yk;
     private String description;
 
-    public MapSensor(Integer id, Integer mapId, Integer devId, String pict, String type, float xk, float yk, String description) {
+    public MapSensor(Integer id, Integer mapId, Integer devId, String type, String pict, float xk, float yk, String description) {
         this.id = id;
         this.mapId = mapId;
         this.devId = devId;
@@ -99,6 +99,7 @@ public class MapSensor {
                + "id:" + id 
                + ",map_id:\"" + mapId + "\""
                + ",dev_id:\"" + devId + "\""
+               + ",type:\"" + type  + "\""
                + ",pict:\"" + pict  + "\""
                + ",xk:\"" + xk  + "\""
                + ",yk:\"" + yk  + "\""

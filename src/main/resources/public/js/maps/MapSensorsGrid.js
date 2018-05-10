@@ -4,8 +4,8 @@ Ext.define('MapSensorsGrid', {
         //this.title = '';
         this.border = true;
         this.frame = false;
-        this.region = 'south';
-        this.height = 400;
+        this.region = 'east';
+        this.width = 1100;
         this.loadMask = true;
         this.emptyText  = 'Нет данных';
         this.margins = '2 2 2 2';
@@ -28,7 +28,12 @@ Ext.define('MapSensorsGrid', {
         this.columns = [            
             {header: 'ID', align: 'left', width: 40, dataIndex: 'id' }, 
             {header: 'Карта', align: 'left', width: 120, dataIndex: 'map_id', editor: new Ext.form.TextField({ allowBlank: false }) },
-            {header: 'Устройство', align: 'left', width: 120, dataIndex: 'dev_id', editor: new Ext.form.TextField({ allowBlank: false }) },
+            {header: 'Устройство', align: 'left', width: 120, dataIndex: 'dev_id', editor: new Ext.form.field.ComboBox({
+                    typeAhead: true, displayField: 'name', valueField: 'id',
+                    triggerAction: 'all',
+                    store: devices//[ ['Y','активно'], ['N','не активено'] ]
+                }), renderer: this.nameRenderer
+            },
             {header: 'Тип', align: 'left', width: 160, dataIndex: 'type', editor: new Ext.form.TextField({ allowBlank: false })  },
             {header: 'Изображение', align: 'left', width: 160, dataIndex: 'pict', editor: new Ext.form.TextField({ allowBlank: false })  },
             {header: 'Позиция X', align: 'left', width: 160, dataIndex: 'xk', editor: new Ext.form.TextField({ allowBlank: false })  },
@@ -91,7 +96,8 @@ Ext.define('MapSensorsGrid', {
             {name: 'xk'}, {name: 'yk'}, {name: 'description'}
           ]//,
       });
-      //this.on('afterlayout', this.loadData, this, { delay: 1, single: true });
+      
+      //this.devicesStore = 
       
     },
     delSensor: function(grid, rowIndex) {
@@ -122,15 +128,15 @@ Ext.define('MapSensorsGrid', {
             icon: Ext.MessageBox.QUESTION
         });
     },
-    addSensor: function() { 
+    addSensor: function(pos) { 
         var rec =  Ext.create('SensorData', {
             id: this.lastId+1,
             map_id: this.mapId,
             dev_id: '',
             type: '',
             pict: '',
-            xk: '',
-            yk: '',
+            xk: (pos) ? pos.x : 0,
+            yk: (pos) ? pos.y : 0,
             description: ''
         });
         rec.setDirty();        
@@ -161,7 +167,7 @@ Ext.define('MapSensorsGrid', {
             error_mes('Ошибка', 'Нет изменений');
         }
     },
-    loadData: function(mapId) { 
+    loadData: function(mapId, upData) { 
       this.mapId = mapId;
       this.mask();
       Ext.Ajax.request({
@@ -173,6 +179,8 @@ Ext.define('MapSensorsGrid', {
           if(ansv.success) {  
             this.store.loadData(ansv.data);
             this.count = this.store.count();
+            upData.sensors = ansv.data;
+            this.papa.mapTemplate.setContent(upData);
           } else error_mes('Ошибка', '!!!!!!!!!!!!!!!!!!!!!!!');  
         },
         failure: function() { this.unmask(); }
@@ -192,5 +200,12 @@ Ext.define('MapSensorsGrid', {
         },
         failure: function() { this.unmask(); }
       });
+    },
+    nameRenderer: function(val) { 
+        for(var i=0; i<devices.getCount(); i++ ) {
+            if( devices.getAt(i).data.id==val )
+                return devices.getAt(i).data.name;
+        }
+        return '';
     }
 });

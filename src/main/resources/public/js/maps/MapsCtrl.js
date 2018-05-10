@@ -10,20 +10,20 @@ Ext.define('MapsCtrl', {
         this.id = 'MapsCtrlPanel';
         this.count = 0;
         this.lastId = 0;
-        this.collapsible = true;
-        this.collapsed = false;
         this.resizable = true;
+        this.layout = 'border';
         
         this.selectedRec = null;
         
         this.init();
-        this.items =  [ this.mapsGrid, this.mapSensorGrid ];
+        this.items =  [ this.mapSensorGrid, this.mapTemplate, this.mapsGrid ];
 
         MapsCtrl.superclass.initComponent.apply(this, arguments);
     },
     init: function() {
         this.mapsGrid = Ext.create('MapsGrid',{papa: this});
         this.mapSensorGrid = Ext.create('MapSensorsGrid',{papa: this});
+        this.mapTemplate = Ext.create('MapTemplate',{papa: this});
     }
 });
 
