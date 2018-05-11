@@ -6,6 +6,7 @@
 package ru.strobo.sh.http;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import javax.servlet.http.HttpServletRequest;
@@ -276,36 +277,21 @@ public class ApiRestController {
     public String getRoomValues( 
             @RequestParam(value="device_id", required = true) String devId
     ) {        
+        String stat = "0";
+        Logger.info("Incoming http request in /rooms/getvalues: { device_id: " + devId + " }");
        
         RoomData rd = roomDataBean.getRoomData(Integer.valueOf(devId));
         if(rd==null)
-            return "{success:true, dev_id:"+ devId +", t:0.00, h:0.00 }";
+            return "{success:true, dev_id:"+ devId +", status: "+stat+", t:0.00, h:0.00 }";
         
         String t = String.valueOf( rd.getT() );
         String h = String.valueOf( rd.getH() );
         
-        return "{success:true, dev_id:"+ devId +", t:" + t + ", h:" + h + "}";
+        if(rd.getDate().getTime()+ 60000 >= (new Date().getTime()))
+            stat = "1";
+        
+        return "{success:true, dev_id:"+ devId +", status: "+stat+", t:" + t + ", h:" + h + "}";
     }
-    
-//    @RequestMapping(value = "/ctrlc", method = GET,  produces = "application/json;charset=UTF-8" )
-//    public String ctrlCommand(
-//            @RequestParam(value="destt", defaultValue="0", required = true) String destT,
-//            @RequestParam(value="tp", defaultValue="0" , required = true) String tp,
-//            @RequestParam(value="to", defaultValue="0", required = false) String to,
-//            @RequestParam(value="t1", defaultValue="0", required = false) String t1
-//    ) {
-//        Logger.info("Incoming http request: /ctrlc: {dest=" + destT + ", tp=" + tp + ", to=" + to + ", t1=" + t1 + "}");
-//        
-//        kotel.setTp(Float.valueOf(tp));
-//        kotel.setTo(Float.valueOf(to));    
-//        kotel.setT1(Float.valueOf(t1));    
-//        String comm = kotel.getControlCommand();
-//        kotel.setControlCommand("");
-//        return "{success:true,"
-//                + "destT:"+ kotel.getDestTp()+","
-//                + "comm:\"" + comm + "\""
-//                + "}";
-//    }
     
     @RequestMapping(value = "/setdestt", method = GET,  produces = "application/json;charset=UTF-8" )
     public String setDestT(

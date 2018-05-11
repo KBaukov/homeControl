@@ -5,6 +5,8 @@
  */
 package ru.strobo.sh.data;
 
+import java.util.Date;
+
 /**
  *
  * @author Strobo
@@ -15,6 +17,7 @@ public class RoomData {
     private String deviceId;
     private float t;
     private float h;
+    private Date date = new Date();
 
 
     public String getType() {
@@ -48,6 +51,14 @@ public class RoomData {
     public void setDeviceId(String deviceId) {
         this.deviceId = deviceId;
     }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
     
     @Override
     public String toString(){
@@ -56,6 +67,7 @@ public class RoomData {
         sb.append("type="+type+"\n");
         sb.append("deviceId="+deviceId+"\n");
         sb.append("t="+t+"; "); sb.append("h="+h+"\n");
+        sb.append("date="+date+"\n");
         sb.append("*****************************");
 
         return sb.toString();

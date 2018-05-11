@@ -92,7 +92,9 @@ Ext.define('MapPanel', {
                 success: function(response, opts) {
                   var ansv = Ext.decode(response.responseText);
                   if(ansv.success) {    
-                    Ext.getDom(this.mapData.id+'_sensor_'+ansv.dev_id).innerHTML 
+                    var sens = Ext.getDom(this.mapData.id+'_sensor_'+ansv.dev_id);
+                        sens.style.opacity = (ansv.status ==1) ? 1 : 0.3;
+                        sens.innerHTML 
                         = parseFloat(ansv.t) +'°C</br></br>'
                         +( (ansv.h!='0.00') ? parseFloat(ansv.h)+'%' : '');
                     
