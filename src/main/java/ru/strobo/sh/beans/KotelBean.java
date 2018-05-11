@@ -203,6 +203,14 @@ public class KotelBean {
         this.wait = wait;
     }
     
+    public RoomData getRoomData(int devId) {
+        String devName = roomDataMap.get(devId);
+        if(devName==null)
+            return null;
+        
+        return roomData.get(devName);
+    }
+    
     private void getDevices() {
         List<Device> dd = dDao.getDevices();
         for(Device d : dd) {

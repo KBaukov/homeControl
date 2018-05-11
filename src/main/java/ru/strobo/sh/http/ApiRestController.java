@@ -25,6 +25,7 @@ import ru.strobo.sh.dao.UserDao;
 import ru.strobo.sh.data.Device;
 import ru.strobo.sh.data.Map;
 import ru.strobo.sh.data.MapSensor;
+import ru.strobo.sh.data.RoomData;
 import ru.strobo.sh.data.User;
 import ru.strobo.sh.ws.DeviceMessageHandler;
 import ru.strobo.sh.ws.DeviceSessionsHandler;
@@ -265,6 +266,21 @@ public class ApiRestController {
 //        kotel.setH3(Float.valueOf(h3));    
         
         return "{success:true}";
+    }
+    
+    @RequestMapping(value = "/rooms/getvalues", method = GET,  produces = "application/json;charset=UTF-8" )
+    public String getRoomValues( 
+            @RequestParam(value="device_id", required = true) String devId
+    ) {        
+       
+        RoomData rd = kotel.getRoomData(Integer.valueOf(devId));
+        if(rd==null)
+            return "{success:true, dev_id:"+ devId +", t:0.00, h:0.00 }";
+        
+        String t = String.valueOf( rd.getT() );
+        String h = String.valueOf( rd.getH() );
+        
+        return "{success:true, dev_id:"+ devId +", t:" + t + ", h:" + h + "}";
     }
     
 //    @RequestMapping(value = "/ctrlc", method = GET,  produces = "application/json;charset=UTF-8" )

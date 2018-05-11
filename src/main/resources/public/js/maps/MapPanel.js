@@ -23,16 +23,21 @@ Ext.define('MapPanel', {
         this.tpl = [
             '<div style="text-align:center">','<img id="mapImage_{id}" src="{pict}" />','</div>',
             '<tpl for="sensors">',
-                '<div class="{type}" id="ht{id}"></div>',
+                '<div class="{type}" id="{parent.id}_sensor_{dev_id}"></div>',
             '</tpl>'
         ];
         this.listeners = { scope: this,
             render: function() {
                 this.getSensorsData();
+                Ext.TaskManager.start(this.task);
             },
             resize: function() {
                 this.resizeImage();
             }
+        };
+        this.task = { scope: this,
+            run: function() { this.getValues() },
+            interval: 5000
         };
     },
     resizeImage: function() {
@@ -51,7 +56,7 @@ Ext.define('MapPanel', {
             var dw = (w - imgW) /2;
             var n = this.data.sensors.length;
             for(var i=0; i<n; i++) {
-                var ht =  Ext.getDom('ht'+this.mapData.sensors[i].id );
+                var ht =  Ext.getDom(this.mapData.id+'_sensor_'+this.mapData.sensors[i].dev_id );
                 ht.style.top  = (20 + imgH * this.mapData.sensors[i].yk)+'px';
                 ht.style.left = (dw + imgW * this.mapData.sensors[i].xk)+'px';
             }
@@ -69,12 +74,32 @@ Ext.define('MapPanel', {
             success: function(response, opts) {
               //this.unmask();
               var ansv = Ext.decode(response.responseText);
-              if(ansv.success) {  
+              if(ansv.success) {    
                 this.mapData.sensors = ansv.data;
                 this.setContent(this.mapData);
               } else error_mes('Ошибка', '!!!!!!!!!!!!!!!!!!!!!!!');  
             },
             failure: function() { this.unmask(); }
         });
+    },
+    getValues: function() {
+        var n = this.data.sensors.length;
+        for(var i=0; i<n; i++) {
+            var devId = this.data.sensors[i].dev_id;
+            Ext.Ajax.request({
+                url: '/api/rooms/getvalues', scope: this, method: 'GET',
+                params: { device_id: devId },
+                success: function(response, opts) {
+                  var ansv = Ext.decode(response.responseText);
+                  if(ansv.success) {    
+                    Ext.getDom(this.mapData.id+'_sensor_'+ansv.dev_id).innerHTML 
+                        = parseFloat(ansv.t) +'°C</br></br>'
+                        +( (ansv.h!='0.00') ? parseFloat(ansv.h1)+'%' : '');
+                    
+                  } else error_mes('Ошибка', '!!!!!!!!!!!!!!!!!!!!!!!');  
+                },
+                failure: function() { this.unmask(); }
+            });
+        }
     }
 });

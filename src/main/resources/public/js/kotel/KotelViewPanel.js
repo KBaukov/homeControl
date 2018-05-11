@@ -53,7 +53,7 @@ Ext.define('KotelViewPanel', {
 ////                    dtLock = true;  
 ////                }
 //                m3.onmousemove =this.changeDest;
-                Ext.TaskManager.start(this.task);
+                //Ext.TaskManager.start(this.task);
             },
             resize: function(){ 
                 this.resize();
