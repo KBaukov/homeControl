@@ -34,7 +34,12 @@ Ext.define('MapSensorsGrid', {
                     store: devices//[ ['Y','активно'], ['N','не активено'] ]
                 }), renderer: this.nameRenderer
             },
-            {header: 'Тип', align: 'left', width: 160, dataIndex: 'type', editor: new Ext.form.TextField({ allowBlank: false })  },
+            {header: 'Тип', align: 'left', width: 160, dataIndex: 'type', editor: new Ext.form.field.ComboBox({
+                    typeAhead: true, displayField: 'name', valueField: 'id',
+                    triggerAction: 'all',
+                    store: [ ['tempIcon','Темп. Сенсор'], ['pirIcon','Сенсор Движения'], ['pressIcon','Сенсор Давления']  ]
+                }), renderer: this.typeRenderer
+            },
             {header: 'Изображение', align: 'left', width: 160, dataIndex: 'pict', editor: new Ext.form.TextField({ allowBlank: false })  },
             {header: 'Позиция X', align: 'left', width: 160, dataIndex: 'xk', editor: new Ext.form.TextField({ allowBlank: false })  },
             {header: 'Позиция Y', align: 'left', width: 160, dataIndex: 'yk', editor: new Ext.form.TextField({ allowBlank: false })  },
@@ -45,7 +50,7 @@ Ext.define('MapSensorsGrid', {
                 items: [{
                     icon: '/extjs/img/cncl_g.gif',
                     tooltip: 'Удалить сенсор', scope: this,
-                    handler: this.delMap
+                    handler: this.delSensor
                 }]
             }
         ];
@@ -179,8 +184,10 @@ Ext.define('MapSensorsGrid', {
           if(ansv.success) {  
             this.store.loadData(ansv.data);
             this.count = this.store.count();
-            upData.sensors = ansv.data;
-            this.papa.mapTemplate.setContent(upData);
+            if(upData) {
+                upData.sensors = ansv.data;
+                this.papa.mapTemplate.setContent(upData);
+            }
           } else error_mes('Ошибка', '!!!!!!!!!!!!!!!!!!!!!!!');  
         },
         failure: function() { this.unmask(); }
@@ -207,5 +214,12 @@ Ext.define('MapSensorsGrid', {
                 return devices.getAt(i).data.name;
         }
         return '';
+    },
+    typeRenderer: function(val) { 
+        //['tempIcon','Темп. Сенсор'], ['pirIcon','Сенсор Движения'], ['pressIcon','Сенсор Давления']
+        if(val=='tempIcon') return 'Темп. Сенсор';
+        else if(val=='pirIcon') return 'Сенсор Движения';
+        else if(val=='pressIcon') return 'Сенсор Давления';
+        else if(val=='') return '';
     }
 });
