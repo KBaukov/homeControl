@@ -94,7 +94,7 @@ Ext.define('MapPanel', {
                   if(ansv.success) {    
                     Ext.getDom(this.mapData.id+'_sensor_'+ansv.dev_id).innerHTML 
                         = parseFloat(ansv.t) +'°C</br></br>'
-                        +( (ansv.h!='0.00') ? parseFloat(ansv.h1)+'%' : '');
+                        +( (ansv.h!='0.00') ? parseFloat(ansv.h)+'%' : '');
                     
                   } else error_mes('Ошибка', '!!!!!!!!!!!!!!!!!!!!!!!');  
                 },

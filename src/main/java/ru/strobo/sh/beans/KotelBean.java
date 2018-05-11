@@ -36,18 +36,7 @@ public class KotelBean {
     private float destTc;
     private int destKw;
     private float destPr;
-    
-    private Map<String, RoomData> roomData = new HashMap<String, RoomData>();
-    private Map<Integer, String> roomDataMap = new HashMap<Integer, String>();
-    
-//    private float t1;
-//    private float t2;
-//    private float t3;
-//    private float h1;
-//    private float h2;
-//    private float h3;
-    
-    
+   
     private int wait;
     
     private String controlCommand;
@@ -66,22 +55,11 @@ public class KotelBean {
         
         kotelDao.getAllSetings();
         
-        getDevices();
-        
         this.tp = 34.55f;
         this.to = 59.15f;
         this.kw = 11;
-        this.pr = 2.2f;
-//        this.t1 = 20.00f;
-//        this.t2 = 20.00f;
-//        this.t3 = 20.00f;
-//        
-//        this.h1 = 20.00f;
-//        this.h2 = 20.00f;
-//        this.h3 = 20.00f;
-        
+        this.pr = 2.2f;        
         this.wait = 30000;
-        
         this.controlCommand = "";
     }
 
@@ -115,36 +93,6 @@ public class KotelBean {
 
     public void setPr(float pr) {
         this.pr = pr;
-    }
-
-    public float getT1() {
-        RoomData rd = roomData.get(roomDataMap.get(0));                
-        return rd== null ? 0 : rd.getT();
-    }
-
-    public float getT2() {
-        RoomData rd = roomData.get(roomDataMap.get(1));                
-        return rd== null ? 0 : rd.getT();
-    }
-
-    public float getT3() {
-        RoomData rd = roomData.get(roomDataMap.get(2));                
-        return rd== null ? 0 : rd.getT();
-    }
-
-    public float getH1() {
-        RoomData rd = roomData.get(roomDataMap.get(0));                
-        return rd== null ? 0 : rd.getH();
-    }
-
-    public float getH2() {
-        RoomData rd = roomData.get(roomDataMap.get(1));                
-        return rd== null ? 0 : rd.getH();
-    }
-
-    public float getH3() {
-        RoomData rd = roomData.get(roomDataMap.get(2));                
-        return rd== null ? 0 : rd.getH();
     }
     
     public float getDestTp() {
@@ -203,23 +151,6 @@ public class KotelBean {
         this.wait = wait;
     }
     
-    public RoomData getRoomData(int devId) {
-        String devName = roomDataMap.get(devId);
-        if(devName==null)
-            return null;
-        
-        return roomData.get(devName);
-    }
-    
-    private void getDevices() {
-        List<Device> dd = dDao.getDevices();
-        for(Device d : dd) {
-            roomDataMap.put(d.getId(), d.getName());
-            if(d.getType().equals("KotelController"))
-                sh.setKotelControllerId(d.getName());
-        }
-    }
-    
     public String toJson() {
         return "";
     }
@@ -230,12 +161,6 @@ public class KotelBean {
         to = data.getTo();
         kw = data.getKw();
         pr = data.getPr();
-        
-    }
-    
-    public void setRoomsData(RoomData data) {
-        
-        roomData.put(data.getDeviceId(), data);
         
     }
 }

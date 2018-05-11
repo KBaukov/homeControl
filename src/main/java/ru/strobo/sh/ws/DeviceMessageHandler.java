@@ -19,6 +19,7 @@ import ru.strobo.sh.data.Device;
 import ru.strobo.sh.data.KotelData;
 import ru.strobo.sh.data.RoomData;
 import ru.strobo.sh.beans.KotelBean;
+import ru.strobo.sh.beans.RoomDataBean;
 
 /**
  *
@@ -32,6 +33,9 @@ public class DeviceMessageHandler extends TextWebSocketHandler {
     
     @Autowired
     DeviceDao dDao;
+    
+    @Autowired
+    RoomDataBean roomDataBean;
     
     @Autowired
     KotelBean kotel;
@@ -81,7 +85,7 @@ public class DeviceMessageHandler extends TextWebSocketHandler {
         } else if(message.contains("roomdata")){ // { "type":"roomdata", deviceId:"ESP_1C2928", "t":23.78, "h":40 }
             RoomData data = objectMapper.readValue(message, RoomData.class);
             Logger.info( data.toString() );
-            kotel.setRoomsData(data);
+            roomDataBean.setRoomsData(data);
         } else if(message.contains("getDevices")){
             String data = "";
             List<Device> devices = dDao.getDevices();

@@ -18,6 +18,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.socket.TextMessage;
 import ru.strobo.sh.beans.KotelBean;
+import ru.strobo.sh.beans.RoomDataBean;
 import ru.strobo.sh.dao.DeviceDao;
 import ru.strobo.sh.dao.KotelDao;
 import ru.strobo.sh.dao.MapsDao;
@@ -40,6 +41,9 @@ public class ApiRestController {
     
     @Autowired
     KotelBean kotel;
+    
+    @Autowired
+    RoomDataBean roomDataBean;
     
     @Autowired
     UserDao uDao;
@@ -273,7 +277,7 @@ public class ApiRestController {
             @RequestParam(value="device_id", required = true) String devId
     ) {        
        
-        RoomData rd = kotel.getRoomData(Integer.valueOf(devId));
+        RoomData rd = roomDataBean.getRoomData(Integer.valueOf(devId));
         if(rd==null)
             return "{success:true, dev_id:"+ devId +", t:0.00, h:0.00 }";
         
@@ -385,21 +389,12 @@ public class ApiRestController {
         String destTp = String.valueOf(kotel.getDestTp());
         String destTo = String.valueOf(kotel.getDestTo());
         String destTc = String.valueOf(kotel.getDestTc());
-        String destKw = String.valueOf(kotel.getDestKw());
-        
-        String t1 = String.valueOf(kotel.getT1());
-        String t2 = String.valueOf(kotel.getT2());
-        String t3 = String.valueOf(kotel.getT3());
-        String h1 = String.valueOf(kotel.getH1());
-        String h2 = String.valueOf(kotel.getH2());
-        String h3 = String.valueOf(kotel.getH3());
+        String destKw = String.valueOf(kotel.getDestKw());;
         String kw = String.valueOf(kotel.getKw());
         String pr = String.valueOf(kotel.getPr());
         
         return "{success:true"
                 + ",tp:" + tp + ",to:" + to + ",kw:" + kw + ",pr:" + pr 
-                + ",t1:" + t1 + ",t2:" + t2 + ",t3:" + t3
-                + ",h1:" + h1 + ",h2:" + h2 + ",h3:" + h3
                 + ",desttp:" + destTp + ",destto:" + destTo 
                 + ",desttc:" + destTc + ",destkw:" + destKw 
         + "}";
