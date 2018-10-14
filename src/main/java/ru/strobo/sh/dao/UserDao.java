@@ -144,7 +144,7 @@ public class UserDao {
         return user;
     }
     
-    public boolean checkSession(String sessionId) {
+    public boolean checkSession(String sessionId, boolean isUpdate ) {
         
         Connection conn = null;
         PreparedStatement statement = null;
@@ -169,8 +169,10 @@ public class UserDao {
                     deleteSessionByID(conn, sessionId);
                     sessStatus = false;
                 } else {
-                    //update exp_date in  sessObj
-                    updateSession(conn, sessionId);
+                    if(isUpdate) {
+                        //update exp_date in  sessObj
+                        updateSession(conn, sessionId);                        
+                    }
                     sessStatus = true;
                 }
             } else {
@@ -290,7 +292,7 @@ public class UserDao {
             int res = statement.executeUpdate();
             
         } catch (SQLException ex) {
-            Logger.error("Error while get user: "+ex.getMessage());
+            Logger.error("Error while update user session: "+ex.getMessage());
         } finally {
             try {
                 if(statement!=null) statement.close();

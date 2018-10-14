@@ -52,14 +52,16 @@ public class CheckSessionInterseptor extends HandlerInterceptorAdapter {
         String sessId = (String) sess.getAttribute("SessID");
         
         Logger.debug("Check session: sessionID="+sessId);
+        Logger.info("Path="+request.getServletPath());
         
-        if(uDao.checkSession(sessId)) {
+        if( uDao.checkSession(sessId, true) ) {            
             return true;
         } else {
             sess.removeAttribute("Auth");
             sess.removeAttribute("User");
             sess.removeAttribute("SessID");
             response.setStatus(401);
+            Logger.debug("Session die:"+sessId);
             return false;
         }
     }

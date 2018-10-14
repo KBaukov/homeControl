@@ -24,39 +24,43 @@ Ext.Ajax.on('requestexception', function(conn, response, opt) {
 });
 
 relogin = function() {
-    LoginWin.items.items[1].getForm().reset();
-    LoginWin.items.items[1].getForm().getFields().items[0].setValue(init.user.userName);
-    LoginWin.show();
-    maskShow(true);
-    Ext.getCmp('loginFormPass').focus(false, 2000);
+    CloseWin();
+//    LoginWin.items.items[1].getForm().reset();
+//    LoginWin.items.items[1].getForm().getFields().items[0].setValue(user.login);
+//    LoginWin.show();
+//    maskShow(true);
+//    Ext.getCmp('loginFormPass').focus(false, 2000);
 };
 
-maskShow = function(on) {    
-    if(on) {
-        var masks = Ext.query('div.x-mask', Ext.getDom('body'));
-        var lm = masks.length-1;
-        loginShadowId = masks[lm].id;
-        masks[lm].style.opacity = 1;
-        masks[lm].style.backgroundImage= 'url("extjs/img/fon1.png")';
-        //clearTimeout(screenLockT);
-    } else {
-        var m = Ext.getDom(loginShadowId);
-        m.style.backgroundImage= '';
-        m.style.opacity = 0;
-        m.style.display = 'none';
-        slCounter = 0;
-        screenLockT=setTimeout(screenLock, 60000);
-    }
-};
+//maskShow = function(on) {    
+//    if(on) {
+//        var masks = Ext.query('div.x-mask', Ext.getDom('body'));
+//        var lm = masks.length-1;
+//        loginShadowId = masks[lm].id;
+//        masks[lm].style.opacity = 1;
+//        masks[lm].style.backgroundImage= 'url("extjs/img/fon1.png")';
+//        //clearTimeout(screenLockT);
+//    } else {
+////        var m = Ext.getDom(loginShadowId);
+////        m.style.backgroundImage= '';
+////        m.style.opacity = 0;
+////        m.style.display = 'none';
+//        slCounter = 0;
+//        screenLockT=setTimeout(screenLock, 60000);
+//    }
+//};
 
 screenLock = function() {
     clearTimeout(screenLockT);
-    if(slCounter++>1) {        
+    if(slCounter) {        
         relogin();
     } else {
-        screenLockT=setTimeout(screenLock, 60000);
+        screenLockT=setTimeout(screenLock, 500);
+        slCounter = true;
     }
+    console.log('--- ' + slCounter);
 };
+
 //##############################################################################
 
 reloginRequest = function() {
@@ -179,22 +183,6 @@ confirmMess = function(mes) {
 //    };
 //}();
 
-devices = Ext.create('Ext.data.JsonStore', {
-    storeId: 'devicesSensData', autoLoad: true,   
-      proxy: {
-          type: 'ajax',
-          url: '/api/devices',
-          reader: {
-              type: 'json',
-              root: 'data',
-              idProperty: 'id'
-          }
-      },
-    fields: [
-      {name: 'id'}, {name: 'type'}, {name: 'name'}, {name: 'ip'},
-      {name: 'active_flag'}, {name: 'description'}
-    ]//,
-});
 
 Ext.grid.feature.Grouping.override({
 	/**
@@ -250,3 +238,6 @@ function getElementPosition(elemId) {
 
     return {"left":l, "top":t, "width": w, "height":h};
 }
+
+
+

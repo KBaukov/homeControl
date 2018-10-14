@@ -24,8 +24,13 @@ public class DeviceSessionsHandler {
     
     public void addSession(WebSocketSession sess) {
         String deviceId = getHeaderValue(sess, "deviceid");
-        sesssions.put(deviceId, sess);
+        if(sesssions.containsKey(deviceId)) {
+            sesssions.replace(deviceId, sess);
+        } else 
+            sesssions.put(deviceId, sess);
         System.out.println("Add session for device: " + deviceId); 
+        
+        
     }
     
     public WebSocketSession getSession(String id) {

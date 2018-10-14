@@ -30,6 +30,7 @@
         <script type="text/javascript" src="/js/maps/MapTemplate.js"></script>
         <script type="text/javascript" src="/js/maps/MapsCtrl.js"></script>
         <script type="text/javascript" src="/js/main/ControlTab.js"></script>
+        <script type="text/javascript" src="/js/main/loadStores.js"></script>
         <script type="text/javascript">var user = ${uName};</script>
         <title>HOME Controll</title>
     </head>    

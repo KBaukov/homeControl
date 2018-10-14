@@ -5,6 +5,8 @@
  */
 package ru.strobo.sh.data;
 
+import java.util.Date;
+
 /**
  *
  * @author Strobo
@@ -17,6 +19,7 @@ public class KotelData {
     private float to;
     private float pr;
     private int kw;
+    private Date date = new Date();
 
     public String getType() {
         return type;
@@ -66,17 +69,26 @@ public class KotelData {
         this.kw = kw;
     }
 
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
     @Override
     public String toString(){
             StringBuilder sb = new StringBuilder();
-            sb.append("***** Kotel Data Details *****\n");
-            sb.append("type="+type+"\n");
+            sb.append("\n***** Kotel Data Details *****\n");
+            sb.append("date="+date+"\n");
+            sb.append("type="+type+"; ");
             sb.append("deviceId="+deviceId+"\n");
-            sb.append("tp="+tp+"\n");
-            sb.append("to="+to+"\n");
-            sb.append("kw="+kw+"\n");
+            sb.append("tp="+tp+"; ");
+            sb.append("to="+to+"; ");
+            sb.append("kw="+kw+"; ");
             sb.append("pr="+pr+"\n");
-            sb.append("*****************************");
+            sb.append("*****************************\n");
 
             return sb.toString();
     }

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.WebSocketSession;
 import ru.strobo.sh.beans.KotelBean;
 import ru.strobo.sh.beans.RoomDataBean;
 import ru.strobo.sh.dao.DeviceDao;
@@ -301,7 +302,13 @@ public class ApiRestController {
             @RequestParam(value="destkw", required = false) String destKw,
             @RequestParam(value="destpr", required = false) String destPr
     ) {
-        if(destTp!=null) kotel.setDestTp(Float.valueOf(destTp));
+        
+        
+        if(destTp!=null) {
+            if(destTp.equals("mm")) destTp = "24";
+            kotel.setDestTp(Float.valueOf(destTp));
+        }
+        
         if(destTo!=null) kotel.setDestTo(Float.valueOf(destTo));
         if(destTc!=null) kotel.setDestTc(Float.valueOf(destTc));
         if(destKw!=null) kotel.setDestKw(Integer.valueOf(destKw));
@@ -357,7 +364,15 @@ public class ApiRestController {
     ) {
         
        try {
-            sh.getSession(sh.getKotelControllerId()).sendMessage(
+            String kotelDeviceId = sh.getKotelControllerId();
+            if(kotelDeviceId==null) 
+               return "{success:false, error: {errorCode: 1234, errorMessage: 'Котел не найден'}}";
+            
+           WebSocketSession sess = sh.getSession(kotelDeviceId);
+           if(sess==null) 
+               return "{success:false, error: {errorCode: 12377, errorMessage: 'Сессия не активна'}}";
+            
+            sess.sendMessage(
                     new TextMessage("{\"action\":\"pessButton\", \"butt\":\""+butt+"\" }")
             );
         } catch (IOException ex) {
@@ -370,7 +385,7 @@ public class ApiRestController {
     
     @RequestMapping(value = "/getvalues", method = GET,  produces = "application/json;charset=UTF-8" )
     public String getValues( ) {        
-        String tp = String.valueOf(kotel.getTp()-2);
+        String tp = String.valueOf(kotel.getTp());
         String to = String.valueOf(kotel.getTo());
         String destTp = String.valueOf(kotel.getDestTp());
         String destTo = String.valueOf(kotel.getDestTo());
@@ -386,19 +401,19 @@ public class ApiRestController {
         + "}";
     }
     
-    @RequestMapping(value = "/sendmessage", method = GET,  produces = "application/json;charset=UTF-8" )
-    public String sendMessage(
-            @RequestParam(value="msg", required = true) String message
-    ) {
-        
-        try {
-            sh.getSession("ESP_DF340A").sendMessage(new TextMessage("{success:true,command:\"LLMRRRRRMRR\", data:[{ksdjksjd:\"sds\"}]}"));
-        } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(ApiRestController.class.getName()).log(Level.SEVERE, null, ex);
-            return "{ success: false }";
-        }
-        
-        return "{ success: true }";
-    }
+//    @RequestMapping(value = "/sendmessage", method = GET,  produces = "application/json;charset=UTF-8" )
+//    public String sendMessage(
+//            @RequestParam(value="msg", required = true) String message
+//    ) {
+//        
+//        try {
+//            sh.getSession("ESP_DF340A").sendMessage(new TextMessage("{success:true,command:\"LLMRRRRRMRR\", data:[{ksdjksjd:\"sds\"}]}"));
+//        } catch (IOException ex) {
+//            java.util.logging.Logger.getLogger(ApiRestController.class.getName()).log(Level.SEVERE, null, ex);
+//            return "{ success: false }";
+//        }
+//        
+//        return "{ success: true }";
+//    }
     
 }
